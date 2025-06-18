@@ -28,6 +28,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    bat "docker --version"
                     bat "docker build -t %IMAGE% ./app"
                     bat "docker push %IMAGE%"
                 }
