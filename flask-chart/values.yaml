@@ -1,0 +1,11 @@
+
+replicaCount: 1
+
+image:
+  repository: us-central1-docker.pkg.dev/YOUR_PROJECT_ID/flask-repo/flask-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
