@@ -18,9 +18,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "gcloud auth configure-docker asia-south1-docker.pkg.dev -q"
-                    sh "docker build -t $IMAGE ./app"
-                    sh "docker push $IMAGE"
+                    bat "gcloud auth configure-docker asia-south1-docker.pkg.dev -q"
+                    bat "docker build -t $IMAGE ./app"
+                    bat "docker push $IMAGE"
                 }
             }
         }
@@ -28,8 +28,8 @@ pipeline {
         stage('Deploy to GKE') {
             steps {
                 script {
-                    sh "gcloud container clusters get-credentials $CLUSTER --zone $ZONE"
-                    sh """
+                    bat "gcloud container clusters get-credentials $CLUSTER --zone $ZONE"
+                    bat """
                     helm upgrade --install flask-app ./flask-chart \
                         --set image.repository=$IMAGE \
                         --set image.tag=latest
