@@ -22,6 +22,10 @@ pipeline {
                 mkdir C:\\jenkins_docker_config 2>nul
                 echo {^"credHelpers^": {^"asia-south1-docker.pkg.dev^": ^"gcloud^"}} > C:\\jenkins_docker_config\\config.json
                 """
+                // Expose DOCKER_CONFIG as env var for later stages
+                withEnv(["DOCKER_CONFIG=C:\\jenkins_docker_config"]) {
+                    echo "Docker auth configured using gcloud credential helper."
+                }
             }
         }
 
