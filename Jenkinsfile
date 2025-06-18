@@ -34,15 +34,12 @@ pipeline {
 
 
 
-      stage('Build Docker Image') {
+    stage('Build Docker Image') {
         steps {
-            timeout(time: 3, unit: 'MINUTES') {
-                bat "docker build --progress=plain -t %IMAGE% ."
-                bat "docker push %IMAGE%"
-            }
+            bat "docker build -f ./app/Dockerfile -t %IMAGE% ./app"
+            bat "docker push %IMAGE%"
         }
     }
-
 
         stage('Deploy to GKE') {
             steps {
