@@ -6,7 +6,7 @@ pipeline {
         IMAGE = "asia-south1-docker.pkg.dev/$PROJECT_ID/flask-repo/flask-app"
         CLUSTER = 'autopilot-cluster-1'
         ZONE = 'asia-south1'
-        DOCKER_CONFIG = 'C:\\jenkins_docker_config'
+        // DOCKER_CONFIG = 'C:\\jenkins_docker_config'
     }
 
     stages {
@@ -16,20 +16,22 @@ pipeline {
             }
         }
 
-       stage('Configure Docker Auth') {
+      stage('Configure Docker Auth') {
             steps {
                 powershell """
-                $configPath = 'C:\\jenkins_docker_config'
-                New-Item -ItemType Directory -Force -Path $configPath | Out-Null
-                $json = @{
+                \$configPath = 'C:\\jenkins_docker_config'
+                New-Item -ItemType Directory -Force -Path \$configPath | Out-Null
+                \$json = @{
                     credHelpers = @{
                         'asia-south1-docker.pkg.dev' = 'gcloud'
                     }
                 } | ConvertTo-Json -Compress
-                $json | Out-File -FilePath "$configPath\\config.json" -Encoding ascii
+                \$json | Out-File -FilePath "\$configPath\\config.json" -Encoding ascii
+                Get-Content "\$configPath\\config.json"
                 """
             }
         }
+
 
 
         stage('Build Docker Image') {
