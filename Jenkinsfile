@@ -19,36 +19,27 @@ pipeline {
         stage('Configure Docker Auth') {
             steps {
                 bat """
-                mkdir C:\\jenkins_docker_config 2>nul
-                echo {^"credHelpers^": {^"asia-south1-docker.pkg.dev^": ^"gcloud^"}} > C:\\jenkins_docker_config\\config.json
+                mkdir %DOCKER_CONFIG% 2>nul
+                echo {^"credHelpers^": {^"asia-south1-docker.pkg.dev^": ^"gcloud^"}} > %DOCKER_CONFIG%\\config.json
                 """
-                // Expose DOCKER_CONFIG as env var for later stages
-                withEnv(["DOCKER_CONFIG=C:\\jenkins_docker_config"]) {
-                    echo "Docker auth configured using gcloud credential helper."
-                }
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    bat "docker --version"
-                    bat "docker build -t %IMAGE% ./app"
-                    bat "docker push %IMAGE%"
-                }
+                bat "docker build -t %IMAGE% ./app"
+                bat "docker push %IMAGE%"
             }
         }
 
         stage('Deploy to GKE') {
             steps {
-                script {
-                    bat "gcloud container clusters get-credentials %CLUSTER% --zone %ZONE%"
-                    bat """
-                    helm upgrade --install flask-app ./flask-chart \
-                        --set image.repository=%IMAGE% \
-                        --set image.tag=latest
-                    """
-                }
+                bat "gcloud container clusters get-credentials %CLUSTER% --zone %ZONE%"
+                bat """
+                helm upgrade --install flask-app ./flask-chart ^
+                    --set image.repository=%IMAGE% ^
+                    --set image.tag=latest
+                """
             }
         }
     }
