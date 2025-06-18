@@ -15,12 +15,20 @@ pipeline {
             }
         }
 
+        stage('Configure Docker Auth') {
+            steps {
+                bat """
+                mkdir %USERPROFILE%\\.docker 2>nul
+                echo {^"credHelpers^": {^"asia-south1-docker.pkg.dev^": ^"gcloud^"}} > %USERPROFILE%\\.docker\\config.json
+                """
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    bat "gcloud auth configure-docker asia-south1-docker.pkg.dev -q"
-                    bat "docker build -t $IMAGE ./app"
-                    bat "docker push $IMAGE"
+                    bat "docker build -t %IMAGE% ./app"
+                    bat "docker push %IMAGE%"
                 }
             }
         }
@@ -28,14 +36,23 @@ pipeline {
         stage('Deploy to GKE') {
             steps {
                 script {
-                    bat "gcloud container clusters get-credentials $CLUSTER --zone $ZONE"
+                    bat "gcloud container clusters get-credentials %CLUSTER% --zone %ZONE%"
                     bat """
                     helm upgrade --install flask-app ./flask-chart \
-                        --set image.repository=$IMAGE \
+                        --set image.repository=%IMAGE% \
                         --set image.tag=latest
                     """
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Deployment to GKE succeeded!'
+        }
+        failure {
+            echo '❌ Deployment failed. Please check the logs.'
         }
     }
 }
