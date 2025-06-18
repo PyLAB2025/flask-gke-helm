@@ -6,7 +6,7 @@ pipeline {
         IMAGE = "asia-south1-docker.pkg.dev/$PROJECT_ID/flask-repo/flask-app"
         CLUSTER = 'autopilot-cluster-1'
         ZONE = 'asia-south1'
-        // DOCKER_CONFIG = 'C:\\jenkins_docker_config'
+        DOCKER_CONFIG = 'C:\\jenkins_docker_config'
     }
 
     stages {
