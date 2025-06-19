@@ -44,6 +44,26 @@ pipeline {
                 """
             }
         }
+
+        stage('Deploy to GKE') {
+            steps {
+                configFileProvider([configFile(fileId: 'deploy-to-gke', targetLocation: 'deploy_to_gke.py')]) {
+                        script {
+                            def result = bat(
+                                script: "python deploy_to_gke.py",
+                                returnStdout: true
+                            ).trim()
+                            echo "Deployment Output:\n${result}"
+                        }
+    
+                }
+            }
+        }
+
+
+
+
+        
     }
 
     // post {
