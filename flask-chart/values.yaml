@@ -2,7 +2,7 @@
 replicaCount: 1
 
 image:
-  repository: us-central1-docker.pkg.dev/YOUR_PROJECT_ID/flask-repo/flask-app
+  repository: asia-south1-docker.pkg.dev/bamboo-diode-456912-p9/flask-repo/flask-app
   tag: latest
   pullPolicy: IfNotPresent
 
