@@ -45,7 +45,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to GKE') {
+        stage('Deploy to GKE-1') {
             steps {
                 configFileProvider([configFile(fileId: 'deploy-to-gke', targetLocation: 'deploy_to_gke.py')]) {
                         script {
