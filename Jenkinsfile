@@ -31,7 +31,7 @@ pipeline {
             steps {
                 bat """
                 docker build -f ./app/Dockerfile -t asia-south1-docker.pkg.dev/${env.PROJECT_ID}/flask-repo/flask-app:${env.env_namespace} ./app
-                docker push asia-south1-docker.pkg.dev/${env.PROJECT_ID}/flask-repo/flask-app
+                docker push asia-south1-docker.pkg.dev/${env.PROJECT_ID}/flask-repo/flask-app:${env.env_namespace}
                 """
             }
         }
