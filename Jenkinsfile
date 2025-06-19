@@ -5,7 +5,9 @@ pipeline {
         PROJECT_ID = 'bamboo-diode-456912-p9'
         CLUSTER = 'autopilot-cluster-1'
         ZONE = 'asia-south1'
-        GCP_KEY = 'C:\\Users\\himan\\Downloads\\devops-lab-ci\\flask-gke-helm\\jenkins-sa-key.json'  // ⚠️ Ensure this path exists
+        GCP_KEY = 'C:\\Users\\himan\\Downloads\\devops-lab-ci\\flask-gke-helm\\jenkins-sa-key.json'  
+        PYTHON_EXEC = 'C:\\Users\\himan\\AppData\\Local\\Programs\\Python\\Python313\\python.exe'
+// ⚠️ Ensure this path exists
     }
 
     stages {
@@ -50,7 +52,7 @@ pipeline {
                 configFileProvider([configFile(fileId: 'deploy_to_gke', targetLocation: 'deploy_to_gke.py')]) {
                         script {
                             def result = bat(
-                                script: "python deploy_to_gke.py",
+                                script: "${env.PYTHON_EXEC}  deploy_to_gke.py",
                                 returnStdout: true
                             ).trim()
                             echo "Deployment Output:\n${result}"
