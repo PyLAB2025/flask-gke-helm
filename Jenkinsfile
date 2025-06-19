@@ -52,7 +52,7 @@ pipeline {
                 configFileProvider([configFile(fileId: 'deploy_to_gke', targetLocation: 'deploy_to_gke.py')]) {
                         script {
                             def result = bat(
-                                script: "${env.PYTHON_EXEC}  deploy_to_gke.py",
+                                script: "${env.PYTHON_EXEC} deploy_to_gke.py ${env.env_namespace}",
                                 returnStdout: true
                             ).trim()
                             echo "Deployment Output:\n${result}"
