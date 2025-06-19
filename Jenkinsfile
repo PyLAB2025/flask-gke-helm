@@ -38,9 +38,9 @@ pipeline {
             steps {
                 bat """
                 gcloud container clusters get-credentials ${env.CLUSTER} --zone ${env.ZONE} --project ${env.PROJECT_ID}
-                helm version
-                helm upgrade --install flask-app ./flask-chart -n dev --set image.repository=asia-south1-docker.pkg.dev/${env.PROJECT_ID}/flask-repo/flask-app --set image.tag=latest 
-                kubectl get pods -n dev
+                // helm version
+                // helm upgrade --install flask-app ./flask-chart -n dev --set image.repository=asia-south1-docker.pkg.dev/${env.PROJECT_ID}/flask-repo/flask-app --set image.tag=latest 
+                // kubectl get pods -n dev
                 """
             }
         }
