@@ -36,19 +36,11 @@ pipeline {
             }
         }
 
-        stage('Deploy to GKE') {
+        stage('Deploy to GKE-1') {
             steps {
                 bat """
                 gcloud container clusters get-credentials ${env.CLUSTER} --zone ${env.ZONE} --project ${env.PROJECT_ID}
-                // helm version
-                // helm upgrade --install flask-app ./flask-chart -n dev --set image.repository=asia-south1-docker.pkg.dev/${env.PROJECT_ID}/flask-repo/flask-app --set image.tag=latest 
-                // kubectl get pods -n dev
                 """
-            }
-        }
-
-        stage('Deploy to GKE-1') {
-            steps {
                 configFileProvider([configFile(fileId: 'deploy_to_gke', targetLocation: 'deploy_to_gke.py')]) {
                         script {
                             def result = bat(
