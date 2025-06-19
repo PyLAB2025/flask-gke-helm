@@ -6,7 +6,7 @@ pipeline {
         IMAGE = "asia-south1-docker.pkg.dev/%PROJECT_ID%/flask-repo/flask-app"
         CLUSTER = 'autopilot-cluster-1'
         ZONE = 'asia-south1'
-        GCP_KEY = "C:\\Users\\himan\\Downloads\\jenkins-sa-key.json.txt"'  //⚠️ Update this path
+        GCP_KEY = 'C:\\Users\\himan\\Downloads\\jenkins-sa-key.json'  //⚠️ Update this path
     }
 
     stages {
