@@ -40,7 +40,7 @@ pipeline {
                 gcloud container clusters get-credentials ${env.CLUSTER} --zone ${env.ZONE} --project ${env.PROJECT_ID}
                 helm upgrade --install flask-app ./flask-chart ^
                     --set image.repository=asia-south1-docker.pkg.dev/${env.PROJECT_ID}/flask-repo/flask-app ^
-                    --set image.tag=latest
+                    --set image.tag=latest -n dev
                 """
             }
         }
