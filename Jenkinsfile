@@ -16,21 +16,19 @@ pipeline {
             }
         }
 
-      stage('Configure Docker Auth') {
-            steps {
-                powershell """
-                \$configPath = 'C:\\jenkins_docker_config'
-                New-Item -ItemType Directory -Force -Path \$configPath | Out-Null
-                \$json = @{
-                    credHelpers = @{
-                        'asia-south1-docker.pkg.dev' = 'gcloud'
-                    }
-                } | ConvertTo-Json -Compress
-                \$json | Out-File -FilePath "\$configPath\\config.json" -Encoding ascii
-                Get-Content "\$configPath\\config.json"
-                """
+         stage('Configure Docker Auth') {
+                steps {
+                    bat """
+                    set CONFIG_PATH=C:\\jenkins_docker_config
+                    if not exist %CONFIG_PATH% mkdir %CONFIG_PATH%
+            
+                    echo {^"credHelpers^":{^"asia-south1-docker.pkg.dev^":^"gcloud^"}} > %CONFIG_PATH%\\config.json
+            
+                    type %CONFIG_PATH%\\config.json
+                    """
+                }
             }
-        }
+
 
         stage('Authenticate gcloud') {
             steps {
