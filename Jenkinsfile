@@ -3,10 +3,9 @@ pipeline {
 
     environment {
         PROJECT_ID = 'bamboo-diode-456912-p9'
-        IMAGE = "asia-south1-docker.pkg.dev/%PROJECT_ID%/flask-repo/flask-app"
         CLUSTER = 'autopilot-cluster-1'
         ZONE = 'asia-south1'
-        GCP_KEY = 'C:\\Users\\himan\\Downloads\\devops-lab-ci\\flask-gke-helm\\jenkins-sa-key.json'  //⚠️ Update this path
+        GCP_KEY = 'C:\\Users\\himan\\Downloads\\devops-lab-ci\\flask-gke-helm\\jenkins-sa-key.json'  // ⚠️ Ensure this path exists
     }
 
     stages {
@@ -19,8 +18,8 @@ pipeline {
         stage('Authenticate with GCP') {
             steps {
                 bat """
-                gcloud auth activate-service-account --key-file=%GCP_KEY%
-                gcloud config set project %PROJECT_ID%
+                gcloud auth activate-service-account --key-file="${env.GCP_KEY}"
+                gcloud config set project ${env.PROJECT_ID}
                 gcloud auth configure-docker asia-south1-docker.pkg.dev --quiet
                 """
             }
@@ -28,17 +27,19 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat "docker build -f ./app/Dockerfile -t %IMAGE% ./app"
-                bat "docker push %IMAGE%"
+                bat """
+                docker build -f ./app/Dockerfile -t asia-south1-docker.pkg.dev/${env.PROJECT_ID}/flask-repo/flask-app ./app
+                docker push asia-south1-docker.pkg.dev/${env.PROJECT_ID}/flask-repo/flask-app
+                """
             }
         }
 
         stage('Deploy to GKE') {
             steps {
-                bat "gcloud container clusters get-credentials %CLUSTER% --zone %ZONE%"
                 bat """
+                gcloud container clusters get-credentials ${env.CLUSTER} --zone ${env.ZONE}
                 helm upgrade --install flask-app ./flask-chart ^
-                    --set image.repository=%IMAGE% ^
+                    --set image.repository=asia-south1-docker.pkg.dev/${env.PROJECT_ID}/flask-repo/flask-app ^
                     --set image.tag=latest
                 """
             }
