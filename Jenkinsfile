@@ -29,13 +29,12 @@ pipeline {
                 }
             }
 
-
-        stage('Authenticate gcloud') {
-            steps {
-                bat 'gcloud auth activate-service-account your-service-account@bamboo-diode-456912-p9.iam.gserviceaccount.com --key-file=C:\\path\\to\\key.json'
-                bat 'gcloud auth configure-docker asia-south1-docker.pkg.dev'
-            }
-        }
+        // stage('Authenticate gcloud') {
+        //     steps {
+        //         bat 'gcloud auth activate-service-account your-service-account@bamboo-diode-456912-p9.iam.gserviceaccount.com --key-file=C:\\path\\to\\key.json'
+        //         bat 'gcloud auth configure-docker asia-south1-docker.pkg.dev'
+        //     }
+        // }
 
     stage('Build Docker Image') {
         steps {
